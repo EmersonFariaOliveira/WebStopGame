@@ -1,3 +1,5 @@
+##ALTER TABLE resposta MODIFY COLUMN resposta.idresposta INT(11) auto_increment;
+
 insert into perfil values(1, 0, 0, 0);
 insert into user values(1, "jefferson","jefferson@gmail.com", "inatelsemfio", 1);
 

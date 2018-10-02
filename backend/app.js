@@ -186,6 +186,65 @@ function getUserDatabase(user, password ){
     });
 }
 
+//Responsavel por formatar os dados da partida
+dashboard.post('/sendGame', function(req, res) {
+
+    var idGame = req.body['idGame']
+    var idUser = req.body['idUser']
+    var name = req.body['name']
+    var city = req.body['city']
+    var animal = req.body['animal']
+    var fruit = req.body['fruit']
+    var color = req.body['color']
+    var career = req.body['career']
+    var car = req.body['car']
+    var movie = req.body['movie']
+
+    var promise = createDataGame(idGame, idUser,name, city, animal, fruit, color, career, car, movie);
+
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+//Insere os dados da partida no banco de dados
+function createDataGame(idGame, idUser,name, city, animal, fruit, color, career, car, movie){
+    return new Promise(function(resolve,reject){
+        
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "INSERT INTO `resposta`(`nome`, `cidade`,`animal`,`fruta`,`cor`,`profissao`,`carro`,\
+        `filme`,`user_iduser`,`partida_idpartida`) VALUES (\""+name+"\",\""+city+"\",\""+animal+"\",\""+fruit+"\",\"\
+        "+color+"\",\""+career+"\",\""+car+"\",\""+movie+"\",\""+idUser+"\",\""+idGame+"\")";
+        
+        con.query(query, function(err, result){
+            if(err){
+                con.end()
+                reject("Query error!");
+            }
+            else{
+                con.end()
+                resolve("Dados gravados com sucesso!!");
+            } 
+        });
+        
+    });
+}
 
 //==============================================================
 
@@ -194,7 +253,7 @@ function getUserDatabase(user, password ){
 Para chamar todas as funções que chamarem o objeto 
 'app' deveremos acessar o endpoint /app/*
 */
-app.use('/login', dashboard); 
+app.use('/app', dashboard); 
 
 //Iniciando o Servidor (Aplicação):
 //==============================================================
