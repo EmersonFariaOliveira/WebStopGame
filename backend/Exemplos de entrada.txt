@@ -1,0 +1,8 @@
+localhost:5000/login/createMatch (POST)
+{
+	"nome": "Minha partida"
+}
+
+
+localhost:5000/login/searchMatch (GET)
+"Retorna uma partida aleatoria disponivel"
