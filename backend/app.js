@@ -37,12 +37,97 @@ function defineConnection(){
 //Rotas da nossa API:
 //==============================================================
 
-//responsavel por renderizar a pagina inicial
+/**
+ * @api {get} localhost:5000/index
+ * @apiVersion 1.0.0
+ * @apiName GetDashboard
+ * @apiGroup Pagina Inicial
+ * @apiDescription Pagina inicial para login
+ * dentro da plataforma de webstop - online
+ * @apiSuccess {String} -- - Home page.
+ */
 dashboard.get('/index', function(req, res) {
     res.json("Em breve a pagina inicial!")
 });
 
+//Responsavel pelo login do usuário na plataforma
+/**
+ * @api {post} localhost:5000/index
+ * @apiVersion 1.0.0
+ * @apiName GetDashboard
+ * @apiGroup Login
+ * @apiDescription Inserção de informações para login
+ * na plataforma de webstop - online
+ * @apiExample {json} Exemplo de uso:
+ *     {
+ *       "user": "name",
+ *       "password": "pwd"
+ *     }
+ * @apiSuccess {String} texto - Usuário valido.
+ * @apiError UserNotFound The <code>404</code> of the User was not found. 
+ */
+dashboard.post('/index', function(req, res) {
+    var user = req.body['user']
+    var password = req.body['password']
+    console.log(user, password);
+
+    var promise = getUserDatabase(user, password);
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+/**
+ * @api {post} localhost:5000/createUser
+ * @apiVersion 1.0.0
+ * @apiName GetDashboard
+ * @apiGroup Criar usuario
+ * @apiDescription Inserção de novos usuarios
+ * na plataforma de webstop - online
+ * @apiExample {json} Exemplo de uso:
+ *     {
+ *       "user": "name",
+ *       "email": "name@email.com"
+ *       "password": "pwd"
+ *     }
+ * @apiSuccess {String} texto - Usuário criado com sucesso.
+ * @apiError InternalError The <code>505</code> of the User was not create. 
+ */
+dashboard.post('/createUser', function(req, res) {
+    
+    var user = req.body['user']
+    var password = req.body['password']
+    var email = req.body['email']
+
+    console.log(user, password);
+
+    var promise = createUser(user, email, password);
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+
 //responsavel por bucar uma partida já criada em progresso
+/**
+ * @api {get} localhost:5000/searchMatch
+ * @apiVersion 1.0.0
+ * @apiName GetDashboard
+ * @apiGroup Pesquisa
+ * @apiDescription Pesquisa de partidas livre na plataforma
+ * @apiSuccess {String} nome - Nome das partidas disponíveis.
+ * @apiError InternalError The <code>505</code> of the problem in query.
+ */
 dashboard.get('/searchMatch', function(req, res) {
     
     var promise = getAvailableGame();
@@ -59,6 +144,20 @@ dashboard.get('/searchMatch', function(req, res) {
 });
 
 //Responsavel pela criação da partida
+/**
+ * @api {post} localhost:5000/createMatch
+ * @apiVersion 1.0.0
+ * @apiName GetDashboard
+ * @apiGroup Criar Partida
+ * @apiDescription Inserção de uma nova partida
+ * na plataforma de webstop - online
+ * @apiExample {json} Exemplo de uso:
+ *     {
+ *       "nome": "Minha partida"
+ *     }
+ * @apiSuccess {String} texto - Jogo: "Minha partida" foi criado com sucesso!!.
+ * @apiError InternalError The <code>505</code> of the problem in query.
+ */
 dashboard.post('/createMatch', function(req, res) {
     var name = req.body['nome']
     console.log(name);
@@ -74,6 +173,132 @@ dashboard.post('/createMatch', function(req, res) {
     );
 });
 
+//Responsavel por formatar os dados da partida
+/**
+ * @api {post} localhost:5000/sendGame
+ * @apiVersion 1.0.0
+ * @apiName GetDashboard
+ * @apiGroup Enviar jogo
+ * @apiDescription Inserção de dados da partida
+ * @apiExample {json} Exemplo de uso:
+ *     {
+ *       "idGame": 1,
+ *       "idUser": 1,
+ *       "name": "Aaaaa",
+ *       "city": "Aaaaa",
+ *       "animal": "Appod",
+ *       "fruit": "Abbrr",
+ *       "color": "Abbbcc",
+ *       "career": "Acdc",
+ *       "car": "Abbbcc",
+ *       "movie": "Aaabb",
+ *     }
+ * @apiSuccess {String} texto - Dados gravados com sucesso!!.
+ * @apiError InternalError The <code>505</code> of the problem in query.
+ */
+dashboard.post('/sendGame', function(req, res) {
+
+    var idGame = req.body['idGame']
+    var idUser = req.body['idUser']
+    var name = req.body['name']
+    var city = req.body['city']
+    var animal = req.body['animal']
+    var fruit = req.body['fruit']
+    var color = req.body['color']
+    var career = req.body['career']
+    var car = req.body['car']
+    var movie = req.body['movie']
+
+    var promise = createDataGame(idGame, idUser,name, city, animal, fruit, color, career, car, movie);
+
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+//Responsavel por formatar os dados da partida
+/**
+ * @api {post} localhost:5000/removeUser
+ * @apiVersion 1.0.0
+ * @apiName GetDashboard
+ * @apiGroup Remover usuario
+ * @apiDescription Remover usuario da plataforma webstop - online
+ * @apiHeader {String} BearerToken - Users require access-key.
+ * @apiExample {json} Exemplo de uso:
+ *     {
+ *       "id": "1"
+ *     }
+ * @apiSuccess {String} texto - Usuário removido com sucesso!.
+ * @apiError InternalError The <code>505</code> of the problem in query.
+ */
+dashboard.post('/removeUser', function(req, res) {
+
+    //Verificação se o usuário é valido "BearerToken"
+    // var header = req.headers["bearertoken"];
+
+    var idUser = req.body['id']
+    var promise = removeUser(idUser)
+
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+//Responsavel por formatar os dados da partida
+/**
+ * @api {post} localhost:5000/updatePerfil
+ * @apiVersion 1.0.0
+ * @apiName GetDashboard
+ * @apiGroup Update perfil de usuario
+ * @apiDescription Atualiza as vitoria, derrota e pontuacap da plataforma webstop - online
+ * @apiHeader {String} BearerToken - Users require access-key.
+ * @apiExample {json} Exemplo de uso:
+ *   {
+ *       "id": 2,
+ *       "vitoria": 0,
+ *       "derrota": 0,
+ *       "pontuacao": 0
+ *   }
+ * @apiSuccess {String} texto - Perfil atualizado com sucesso!.
+ * @apiError InternalError The <code>505</code> of the problem in query.
+ */
+dashboard.post('/updatePerfil', function(req, res) {
+
+    //Verificação se o usuário é valido "BearerToken"
+    var header = req.headers["bearertoken"];
+
+    var idUser = req.body['id']
+    var vitoria = req.body['vitoria']
+    var derrota = req.body['derrota']
+    var pontuacao = req.body['pontuacao']
+
+    var promise = updatePerfil(idUser, vitoria, derrota, pontuacao)
+
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+//==============================================================
+
+
+//Funções da nossa API:
+//==============================================================
 //Insere a partida no banco de dados
 function createMatch(name){
     return new Promise(function(resolve,reject){
@@ -104,23 +329,6 @@ function createMatch(name){
         
     });
 }
-
-//Responsavel pelo login do usuário na plataforma
-dashboard.post('/index', function(req, res) {
-    var user = req.body['user']
-    var password = req.body['password']
-    console.log(user, password);
-
-    var promise = getUserDatabase(user, password);
-    promise.then(
-        function(response){
-            res.send(response);
-        },
-        function(err){
-            res.send(err);
-        }
-    );
-});
 
 //verifica os jogos que estão em progresso
 function getAvailableGame(){
@@ -186,32 +394,6 @@ function getUserDatabase(user, password ){
     });
 }
 
-//Responsavel por formatar os dados da partida
-dashboard.post('/sendGame', function(req, res) {
-
-    var idGame = req.body['idGame']
-    var idUser = req.body['idUser']
-    var name = req.body['name']
-    var city = req.body['city']
-    var animal = req.body['animal']
-    var fruit = req.body['fruit']
-    var color = req.body['color']
-    var career = req.body['career']
-    var car = req.body['car']
-    var movie = req.body['movie']
-
-    var promise = createDataGame(idGame, idUser,name, city, animal, fruit, color, career, car, movie);
-
-    promise.then(
-        function(response){
-            res.send(response);
-        },
-        function(err){
-            res.send(err);
-        }
-    );
-});
-
 //Insere os dados da partida no banco de dados
 function createDataGame(idGame, idUser,name, city, animal, fruit, color, career, car, movie){
     return new Promise(function(resolve,reject){
@@ -246,6 +428,104 @@ function createDataGame(idGame, idUser,name, city, animal, fruit, color, career,
     });
 }
 
+//Insere novos usuarios na plataforma
+function createUser(user, email, password){
+    return new Promise(function(resolve,reject){
+        
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "CALL createUser(\""+user+"\",\""+email+"\",\""+password+"\");"
+        
+        con.query(query, function(err, result){
+            if(err){
+                con.end()
+                
+                reject("Query error!");
+            }
+            else{
+                resolve("Usuário criado com sucesso!")
+                con.end()
+            }
+        });
+        
+    });
+}
+
+//Remove os dados do usuario no banco de dados
+function removeUser(idUser){
+    return new Promise(function(resolve,reject){
+        
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "CALL removeUser("+idUser+")"
+        
+        con.query(query, function(err, result){
+            if(err){
+                con.end()
+                
+                reject("Query error!");
+            }
+            else{
+                resolve("Usuário removido com sucesso!")
+                con.end()
+            }
+        });
+        
+    });
+}
+
+//Remove os dados do usuario no banco de dados
+function updatePerfil(idUser, vitoria, derrota, pontuacao){
+    return new Promise(function(resolve,reject){
+        
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "CALL perfilUserUpdate("+idUser+","+vitoria+","+derrota+","+pontuacao+")"
+        
+        con.query(query, function(err, result){
+            if(err){
+                con.end()
+                
+                reject("Query error!");
+            }
+            else{
+                resolve("Perfil atualizado com sucesso!")
+                con.end()
+            }
+        });
+        
+    });
+}
 //==============================================================
 
 
