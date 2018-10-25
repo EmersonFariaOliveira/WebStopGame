@@ -6,3 +6,33 @@ localhost:5000/login/createMatch (POST)
 
 localhost:5000/login/searchMatch (GET)
 "Retorna uma partida aleatoria disponivel"
+
+
+<<<LOGIN>>>    		OK
+- email
+- senha
+
+<<<CRIAR USUÁRIO>>>   	OK
+- nome
+- email
+- senha
+
+<<<<INDEX>>>>		OK
+- Criar partida
+- Procurar partida existente
+- Histórico de jogos
+
+<<<EM JOGO>>>
+- nome
+- cidade
+- animal
+- fruta
+- cor
+- profissão
+- carro
+- filme
+- Botão enviar respostas
+
+<<<LISTAR RESULTADOS>>>
+- partidas
+- pontuação
