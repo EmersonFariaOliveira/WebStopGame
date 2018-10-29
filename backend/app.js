@@ -449,7 +449,6 @@ function createUser(user, email, password){
         con.query(query, function(err, result){
             if(err){
                 con.end()
-                
                 reject("Query error!");
             }
             else{
