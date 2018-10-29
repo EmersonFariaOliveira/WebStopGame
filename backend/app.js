@@ -209,7 +209,7 @@ dashboard.post('/sendGame', function(req, res) {
     var car = req.body['car']
     var movie = req.body['movie']
 
-    var promise = createDataGame(idGame, idUser,name, city, animal, fruit, color, career, car, movie);
+    var promise = createDataGame(idGame, idUser, name, city, animal, fruit, color, career, car, movie);
 
     promise.then(
         function(response){
