@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>WebStop - Dashboard</title>
+    <title>WebStop - Historico</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -46,8 +46,8 @@
             <i class="fas fa-user-circle fa-fw"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="perfil.html">Perfil</a>
-            <a class="dropdown-item" href="historicoPartida.html">Histórico de Partida</a>
+              <a class="dropdown-item" href="perfil.html">Perfil</a>
+              <a class="dropdown-item" href="historicoPartida.html">Histórico de Partida</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Sair</a>
           </div>
@@ -79,7 +79,7 @@
         <div class="container-fluid">
 
           <!-- Page Content -->
-          <h1>Menu</h1>
+          <h1>Historico</h1>
           <hr>
 
           <div class="panel-body">
@@ -95,50 +95,16 @@
                         <div class="modal-body">
                           <form>
                               <div class="form-group">
-                                <label for="firstName">Nome da partida</label>
-                                <div class="form-label-group"> 
-                                  <input type="text" id="nomePartida" class="form-control" required="required" autofocus="autofocus">
+                                <div class="form-label-group">
+                                  <input type="text" id="nomePartida" class="form-control" placeholder="First name" required="required" autofocus="autofocus">
+                                  <label for="firstName">Nome da partida</label>
                                 </div>
                               </div>              
                           </form>    
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                            <button type="button" class="btn btn-primary" onclick="criarPartida()">Criar</button>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-            <!-- Modal -->
-            <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel">Buscar partida</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            
-                        </div>
-                        <div class="modal-body">
-                          <form>
-                              <div class="form-group">
-                                  <label>Selecione uma partida</label>
-                                  <select class="form-control">
-                                      <option selected="selected"></option>
-                                      <option>Partida um</option>
-                                      <option>Partida dois</option>
-                                      <option>Partida três</option>
-                                      <option>Partida quatro</option>
-                                      <option>Partida cinco</option>
-                                  </select>
-                              </div>       
-                          </form>    
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                            <button type="button" class="btn btn-primary" onclick="criarPartida()">Criar</button>
+                            <button type="button" class="btn btn-primary">Criar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -153,35 +119,48 @@
 
           <div class="bs-example" data-example-id="list-group-custom-content"> 
                        
-            <div class="list-group col-md-12"> 
-              <a href="#" class="list-group-item" data-toggle="modal" data-target="#myModal" onmouseover="SelectItem(this)" onmouseout="DeselectItem(this)"> 
-                <div class="row show-grid">
-                  
-                  <div class="col-md-11">
-                    <h4 style="margin-top: 10px" class="list-group-item-heading">Criar Partida</h4> 
-                    <p class="list-group-item-text" >Cria uma nova partida para que os usuarios possam entrar</p> 
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="list-group-item" data-toggle="modal" data-target="#modalCreate" onmouseover="SelectItem(this)" onmouseout="DeselectItem(this)"> 
-                  <div class="row show-grid">
-                  
-                    <div class="col-md-11">
-                      <h4 style="margin-top: 10px" class="list-group-item-heading"> Buscar partida</h4> 
-                      <p class="list-group-item-text">Busca uma partida ja existente</p> 
-                    </div>
-                  </div>
-              </a>
-              <a href="historicoPartida.html" class="list-group-item" onmouseover="SelectItem(this)" onmouseout="DeselectItem(this)"> 
-                <div class="row show-grid">
-                
-                  <div class="col-md-11">
-                    <h4 style="margin-top: 10px" class="list-group-item-heading">Histórico de Partida</h4> 
-                    <p class="list-group-item-text">Pode conferir os resultados das suas partidas recentes</p> 
-                  </div>
-                </div>
-            </a>  
+            <!-- DataTables Example -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+              Historico de partidas</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Nome partida</th>
+                      <th>Vitoria</th>
+                      <th>Pontuação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Partida um</td>
+                      <td>Vitória</td>
+                      <td>98.50</td>
+                    </tr>
+                    <tr>
+                      <td>Partida dois</td>
+                      <td>Derrota</td>
+                      <td>25.41</td>
+                    </tr>
+                    <tr>
+                      <td>Partida três</td>
+                      <td>Vitória</td>
+                      <td>90.50</td>
+                    </tr>
+                    <tr>
+                      <td>Partida quatro</td>
+                      <td>Vitória</td>
+                      <td>84</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
+          </div>
+
 
           </div>
 
@@ -233,9 +212,6 @@
       }
       function DeselectItem(x){
         x.classList.remove('active');
-      }
-      function criarPartida(){
-        window.location.replace("jogo.html")
       }
     </script>
 
