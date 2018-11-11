@@ -127,12 +127,12 @@
                           <form>
                               <div class="form-group">
                                   <label>Selecione uma partida</label>
-                                  <select class="form-control">
+                                  <select id="selectP" class="form-control">
                                       <option selected="selected"></option>
-                                      <option>Partida um</option>
-                                      <option>Partida dois</option>
-                                      <option>Partida três</option>
-                                      <option>Partida quatro</option>
+                                      <option >Partida um</option>
+                                      <option >Partida dois</option>
+                                      <option >Partida três</option>
+                                      <option >Partida quatro</option>
                                       <option>Partida cinco</option>
                                   </select>
                               </div>       
@@ -140,7 +140,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                            <button type="button" class="btn btn-primary" onclick="criarPartida()">Criar</button>
+                            <button type="button" class="btn btn-primary" onclick="partidaEmJogo()">Jogar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -165,7 +165,7 @@
                   </div>
                 </div>
               </a>
-              <a href="#" class="list-group-item" data-toggle="modal" data-target="#modalCreate" onmouseover="SelectItem(this)" onmouseout="DeselectItem(this)"> 
+              <a href="#" class="list-group-item" data-toggle="modal" data-target="#modalCreate" onclick="partidaEmJogo()" onmouseover="SelectItem(this)" onmouseout="DeselectItem(this)"> 
                   <div class="row show-grid">
                   
                     <div class="col-md-11">

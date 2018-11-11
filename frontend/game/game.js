@@ -53,6 +53,7 @@ function verificaLogin(){
             if(xhttp.readyState == 4 && xhttp.status == 200) {
                 window.location.replace("index.html")
                 localStorage.setItem("userOn", "on");
+                localStorage.setItem("email", email);
             }else document.getElementById("alertDanger").innerHTML = html
         }
         xhttp.send(data);
@@ -61,6 +62,67 @@ function verificaLogin(){
     
 
 }
+
+
+function novoUsuario(){
+
+    const html = "<div  class=\"alert alert-danger text-center\">Senhas não conferem.</div>"
+
+    var name = document.getElementById("firstName").value;
+    var email = document.getElementById("inputEmail").value;
+    var pwd1 = document.getElementById("inputPassword").value;
+    var pwd2 = document.getElementById("confirmPassword").value;
+
+    if(pwd1 != pwd2){
+        document.getElementById("alertDanger").innerHTML = html
+    }else{
+        var obj = { user: name, email: email,password: pwd2}
+        data = JSON.stringify(obj);
+
+
+        var xhttp = new XMLHttpRequest();
+
+        var urlC = url + "/createUser";
+        xhttp.open('POST', urlC, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+
+        xhttp.onreadystatechange = function() {
+            if(xhttp.readyState == 4 && xhttp.status == 200) {
+                window.location.replace("login.html")
+            }else document.getElementById("alertDanger").innerHTML = html
+        }
+        xhttp.send(data);
+    }
+}
+
+
+function partidaEmJogo(){
+    var e = document.getElementById("selectP");
+
+    var xhttp = new XMLHttpRequest();
+
+    var urlC = url + "/searchMatch";
+    xhttp.open('GET', urlC, true);
+    xhttp.setRequestHeader('Content-type', 'application/json');
+
+    xhttp.onreadystatechange = function() {
+        if(xhttp.readyState == 4 && xhttp.status == 200) {
+            var obj = JSON.parse(xhttp.response)["nomes"];
+            var options = []
+            options.push("<option selected=\"selected\"></option>")
+            for(var i=0; i < obj.length; i++){
+                options.push("<option >" + obj[i] + "</option>")
+            }
+            e.innerHTML = options
+        }
+    }
+    xhttp.send();
+}
+
+function perfil(){
+    
+}
+
 
 function endSession(){
     while(localStorage.getItem("userOn") == "on")

@@ -117,10 +117,10 @@ dashboard.post('/createUser', function(req, res) {
     var promise = createUser(user, email, password);
     promise.then(
         function(response){
-            res.send(response);
+            res.status(200).send(response);
         },
         function(err){
-            res.send(err);
+            res.status(406).send(err);
         }
     );
 });
@@ -143,7 +143,13 @@ dashboard.get('/searchMatch', function(req, res) {
         function(response){
             //seleciona um jogo aleatoriamente para usuario entrar
             var numGame = Math.floor((Math.random() * response.length));
-            res.send(response[numGame].nome);
+            var nomesResponse = []
+            for(var i = 0; i < response.length; i++)
+                nomesResponse.push(response[i].nome)
+
+            obj = {nomes: nomesResponse}
+            console.log(JSON.stringify(obj))
+            res.send(JSON.stringify(obj));
         },
         function(err){
             res.send(err);
@@ -362,6 +368,7 @@ function getAvailableGame(){
             }
             else{
                 con.end()
+                
                 resolve(result);
             } 
         });
