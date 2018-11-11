@@ -10,6 +10,8 @@
     <meta name="author" content="">
 
     <title>WebStop - Dashboard</title>
+    
+    <script src="game/require.js"></script>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -221,7 +223,7 @@
           <div class="modal-body">Selecione a opção "sair" abaixo se estiver pronto para encerrar sua sessão.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-            <a class="btn btn-primary" href="login.html">Sair</a>
+            <a class="btn btn-primary" onclick="endSession()">Sair</a>
           </div>
         </div>
       </div>

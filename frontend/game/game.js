@@ -52,6 +52,7 @@ function verificaLogin(){
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) {
                 window.location.replace("index.html")
+                localStorage.setItem("userOn", "on");
             }else document.getElementById("alertDanger").innerHTML = html
         }
         xhttp.send(data);
@@ -60,3 +61,10 @@ function verificaLogin(){
     
 
 }
+
+function endSession(){
+    while(localStorage.getItem("userOn") == "on")
+        localStorage.setItem("userOn", "off")
+    window.location.replace("login.html")
+}
+
