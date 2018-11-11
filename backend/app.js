@@ -85,7 +85,7 @@ dashboard.post('/index', function(req, res) {
             res.send(response);
         },
         function(err){
-            res.send(err);
+            res.status(406).send(err);
         }
     );
 });
@@ -384,20 +384,22 @@ function getUserDatabase(user, password ){
             } 
         });
 
-        var query = "SELECT *FROM user WHERE nome = \"" + user + "\"";
+        var query = "SELECT *FROM user WHERE email = \"" + user + "\"";
         con.query(query, function(err, result){
             if(err){
                 con.end()
                 reject("Query error!");
             }
-            if(user == result[0].nome && password == result[0].senha){
+
+            if( (result[0] != undefined) && (user == result[0].email && password == result[0].senha)){
                 con.end()
                 resolve("Valid user!"); 
             }
             else{
                 con.end()
                 reject("Invalid user!");
-            } 
+            }
+            
         });
     });
 }
