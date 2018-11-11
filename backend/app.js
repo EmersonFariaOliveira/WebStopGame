@@ -13,6 +13,14 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//Acho que é gambiarra
+//Estava dando erro sem esse código.
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 /** Definição da porta onde será executada a nossa aplicação */
 var port = process.env.PORT || 5000;
 
@@ -38,7 +46,7 @@ function defineConnection(){
 //==============================================================
 
 /**
- * @api {get} localhost:5000/index
+ * @api {get} localhost:5000/app/index
  * @apiVersion 1.0.0
  * @apiName GetDashboard
  * @apiGroup Pagina Inicial
@@ -52,7 +60,7 @@ dashboard.get('/index', function(req, res) {
 
 //Responsavel pelo login do usuário na plataforma
 /**
- * @api {post} localhost:5000/index
+ * @api {post} localhost:5000/app/index
  * @apiVersion 1.0.0
  * @apiName GetDashboard
  * @apiGroup Login
@@ -83,7 +91,7 @@ dashboard.post('/index', function(req, res) {
 });
 
 /**
- * @api {post} localhost:5000/createUser
+ * @api {post} localhost:5000/app/createUser
  * @apiVersion 1.0.0
  * @apiName GetDashboard
  * @apiGroup Criar usuario
@@ -120,7 +128,7 @@ dashboard.post('/createUser', function(req, res) {
 
 //responsavel por bucar uma partida já criada em progresso
 /**
- * @api {get} localhost:5000/searchMatch
+ * @api {get} localhost:5000/app/searchMatch
  * @apiVersion 1.0.0
  * @apiName GetDashboard
  * @apiGroup Pesquisa
@@ -145,7 +153,7 @@ dashboard.get('/searchMatch', function(req, res) {
 
 //Responsavel pela criação da partida
 /**
- * @api {post} localhost:5000/createMatch
+ * @api {post} localhost:5000/app/createMatch
  * @apiVersion 1.0.0
  * @apiName GetDashboard
  * @apiGroup Criar Partida
@@ -175,7 +183,7 @@ dashboard.post('/createMatch', function(req, res) {
 
 //Responsavel por formatar os dados da partida
 /**
- * @api {post} localhost:5000/sendGame
+ * @api {post} localhost:5000/app/sendGame
  * @apiVersion 1.0.0
  * @apiName GetDashboard
  * @apiGroup Enviar jogo
@@ -223,7 +231,7 @@ dashboard.post('/sendGame', function(req, res) {
 
 //Responsavel por formatar os dados da partida
 /**
- * @api {post} localhost:5000/removeUser
+ * @api {post} localhost:5000/app/removeUser
  * @apiVersion 1.0.0
  * @apiName GetDashboard
  * @apiGroup Remover usuario
@@ -256,7 +264,7 @@ dashboard.post('/removeUser', function(req, res) {
 
 //Responsavel por formatar os dados da partida
 /**
- * @api {post} localhost:5000/updatePerfil
+ * @api {post} localhost:5000/app/updatePerfil
  * @apiVersion 1.0.0
  * @apiName GetDashboard
  * @apiGroup Update perfil de usuario
