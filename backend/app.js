@@ -38,7 +38,9 @@ function defineConnection(){
         host: "localhost",
         user: "root",
         password: "",
-        database: "webstop"
+        database: "webstop",
+        insecureAuth : true,
+        port : 3308
     });
 }
 
@@ -255,7 +257,7 @@ dashboard.post('/removeUser', function(req, res) {
     //Verificação se o usuário é valido "BearerToken"
     // var header = req.headers["bearertoken"];
 
-    var idUser = req.body['id']
+    var idUser = req.body['user']
     var promise = removeUser(idUser)
 
     promise.then(
@@ -493,12 +495,12 @@ function removeUser(idUser){
             } 
         });
 
-        var query = "CALL removeUser("+idUser+")"
+        var query = "CALL removeUser(\""+idUser+"\")"
         
         con.query(query, function(err, result){
             if(err){
+                console.log(err)
                 con.end()
-                
                 reject("Query error!");
             }
             else{

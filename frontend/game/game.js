@@ -63,6 +63,35 @@ function verificaLogin(){
 
 }
 
+function removeUser(){
+    
+    var email = localStorage.getItem("email");
+    console.log(email)
+    if(email!= ""){
+
+        var obj = {user: email}
+        data = JSON.stringify(obj);
+
+        console.log(data)
+
+        var xhttp = new XMLHttpRequest();
+
+            var urlC = url + "/removeUser";
+            xhttp.open('POST', urlC, true);
+            xhttp.setRequestHeader('Content-type', 'application/json');
+
+            xhttp.onreadystatechange = function() {
+                if(xhttp.readyState == 4 && xhttp.status == 200) {
+                    window.location.replace("login.html")
+                }else{
+                    var json_data = xhttp.responseText; 
+                    //console.log(json_data)
+                    //alert("Algo deu errado");
+                }
+            }
+            xhttp.send(data);
+    }
+}
 
 function novoUsuario(){
 
@@ -95,6 +124,15 @@ function novoUsuario(){
     }
 }
 
+function jogar(){
+    
+    var e = document.getElementById("selectP");
+    var game = e.options[e.selectedIndex].value;
+
+    window.location.replace("jogo.html");
+
+    console.log(game);
+}
 
 function partidaEmJogo(){
     var e = document.getElementById("selectP");
