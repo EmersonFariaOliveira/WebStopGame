@@ -38,7 +38,9 @@ function defineConnection(){
         host: "localhost",
         user: "root",
         password: "",
-        database: "webstop"
+        database: "webstop",
+        insecureAuth : true,
+        port : 3308
     });
 }
 
@@ -157,6 +159,21 @@ dashboard.get('/searchMatch', function(req, res) {
     );
 });
 
+dashboard.post('/isGameFinished', function(req, res) {
+    var name = req.body['nome']
+    console.log(name);
+
+    var promise = getGameIsFinished(name);
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
 //Responsavel pela criação da partida
 /**
  * @api {post} localhost:5000/app/createMatch
@@ -235,6 +252,22 @@ dashboard.post('/sendGame', function(req, res) {
     );
 });
 
+dashboard.post('/finalizar', function(req, res) {
+
+    var name = req.body['nome']
+    
+    var promise = setGameFinished(name);
+
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
 //Responsavel por formatar os dados da partida
 /**
  * @api {post} localhost:5000/app/removeUser
@@ -255,8 +288,44 @@ dashboard.post('/removeUser', function(req, res) {
     //Verificação se o usuário é valido "BearerToken"
     // var header = req.headers["bearertoken"];
 
-    var idUser = req.body['id']
+    var idUser = req.body['user']
     var promise = removeUser(idUser)
+
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+dashboard.post('/getUserID', function(req, res) {
+
+    //Verificação se o usuário é valido "BearerToken"
+    // var header = req.headers["bearertoken"];
+
+    var emailUser = req.body['usuario']
+    var promise = getUserID(emailUser)
+
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+dashboard.post('/getPartidaID', function(req, res) {
+
+    //Verificação se o usuário é valido "BearerToken"
+    // var header = req.headers["bearertoken"];
+
+    var emailUser = req.body['nome']
+    var promise = getPartidaID(emailUser)
 
     promise.then(
         function(response){
@@ -341,6 +410,66 @@ function createMatch(name){
             } 
         });
         
+    });
+}
+
+function setGameFinished(name){
+    return new Promise(function(resolve, reject){
+
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "UPDATE partida set em_progresso = 0 WHERE nome = \"" + name + "\"";
+        con.query(query, function(err, result){
+            if(err){
+                con.end()
+                reject("Query error!");
+            }
+            else{
+                con.end()
+                
+                resolve(result);
+            } 
+        });
+    });
+}
+
+function getGameIsFinished(name){
+    return new Promise(function(resolve, reject){
+
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "SELECT *FROM partida WHERE nome = \"" + name + "\"";
+        con.query(query, function(err, result){
+            if(err){
+                con.end()
+                reject("Query error!");
+            }
+            else{
+                con.end()
+                
+                resolve(result);
+            } 
+        });
     });
 }
 
@@ -477,6 +606,70 @@ function createUser(user, email, password){
     });
 }
 
+function getUserID(email){
+    return new Promise(function(resolve,reject){
+        
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "SELECT (iduser) FROM user WHERE email = \"" + email + "\"";
+        
+        con.query(query, function(err, result){
+            if(err){
+                console.log(err)
+                con.end()
+                reject("Query error!");
+            }
+            else{
+                resolve(result)
+                con.end()
+            }
+        });
+        
+    });
+}
+
+function getPartidaID(nome){
+    return new Promise(function(resolve,reject){
+        
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "SELECT (idpartida) FROM partida WHERE nome = \"" + nome + "\"";
+        
+        con.query(query, function(err, result){
+            if(err){
+                console.log(err)
+                con.end()
+                reject("Query error!");
+            }
+            else{
+                resolve(result)
+                con.end()
+            }
+        });
+        
+    });
+}
+
 //Remove os dados do usuario no banco de dados
 function removeUser(idUser){
     return new Promise(function(resolve,reject){
@@ -493,12 +686,12 @@ function removeUser(idUser){
             } 
         });
 
-        var query = "CALL removeUser("+idUser+")"
+        var query = "CALL removeUser(\""+idUser+"\")"
         
         con.query(query, function(err, result){
             if(err){
+                console.log(err)
                 con.end()
-                
                 reject("Query error!");
             }
             else{

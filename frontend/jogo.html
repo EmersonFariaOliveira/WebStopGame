@@ -12,6 +12,7 @@
     <title>WebStop - Jogo</title>
 
     <script src="game/require.js"></script>
+    <script src="game/inGame.js"></script>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -27,7 +28,7 @@
 
   </head>
 
-  <body id="page-top">
+  <body id="page-top" onload="isGameFinished();">
                             
     <nav class="navbar navbar-expand navbar-dark bg-primary static-top">
 
@@ -122,41 +123,41 @@
           <div class="bs-example" data-example-id="list-group-custom-content"> 
                        
             <div class="list-group col-md-12"> 
-              <form role="form">
+              
                 <div class="form-group">
                     <label>Nome</label>
-                    <input class="form-control">
+                    <input class="form-control" id="nome">
                 </div>
                 <div class="form-group">
                   <label>Cidade</label>
-                  <input class="form-control">
+                  <input class="form-control" id="cidade">
                 </div>
                 <div class="form-group">
                   <label>Animal</label>
-                  <input class="form-control">
+                  <input class="form-control" id="animal">
                 </div>
                 <div class="form-group">
                   <label>Fruta</label>
-                  <input class="form-control">
+                  <input class="form-control" id="fruta">
                 </div>
                 <div class="form-group">
                   <label>Cor</label>
-                  <input class="form-control">
+                  <input class="form-control" id="cor">
                 </div>
                 <div class="form-group">
                   <label>Profissão</label>
-                  <input class="form-control">
+                  <input class="form-control" id="profissao">
                 </div>
                 <div class="form-group">
                   <label>Carro</label>
-                  <input class="form-control">
+                  <input class="form-control" id="carro">
                 </div>
                 <div class="form-group">
                   <label>Filme</label>
-                  <input class="form-control">
+                  <input class="form-control" id="filme">
                 </div>
-                <button type="submit" class="btn btn-default col-md-12">Enviar</button>
-              </form>
+                <button id="enviar" class="btn btn-default col-md-12" onclick="finalizar()">Enviar</button>
+              
             </div>
 
           </div>
