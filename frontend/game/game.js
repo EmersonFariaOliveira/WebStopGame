@@ -1,5 +1,5 @@
 
-const url = "http://localhost:5000/app"
+var url = "http://localhost:5000/app"
 
 
 function SelectItem(x) {
@@ -102,6 +102,8 @@ function novoUsuario(){
     var pwd1 = document.getElementById("inputPassword").value;
     var pwd2 = document.getElementById("confirmPassword").value;
 
+    console.log(pwd1);
+    console.log(pwd2);
     if(pwd1 != pwd2){
         document.getElementById("alertDanger").innerHTML = html
     }else{
@@ -129,15 +131,17 @@ function jogar(){
     var e = document.getElementById("selectP");
     var game = e.options[e.selectedIndex].value;
 
+    localStorage.setItem("partida", game);
+    //console.log("aqui: "+localStorage.getItem("partida"))
     window.location.replace("jogo.html");
 
-    console.log(game);
 }
 
 function partidaEmJogo(){
     var e = document.getElementById("selectP");
 
     var xhttp = new XMLHttpRequest();
+
 
     var urlC = url + "/searchMatch";
     xhttp.open('GET', urlC, true);
@@ -160,7 +164,6 @@ function partidaEmJogo(){
 function perfil(){
     
 }
-
 
 function endSession(){
     while(localStorage.getItem("userOn") == "on")
