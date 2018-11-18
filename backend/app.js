@@ -144,7 +144,7 @@ dashboard.get('/searchMatch', function(req, res) {
     promise.then(
         function(response){
             //seleciona um jogo aleatoriamente para usuario entrar
-            // var numGame = Math.floor((Math.random() * response.length));
+            var numGame = Math.floor((Math.random() * response.length));
             var nomesResponse = []
             for(var i = 0; i < response.length; i++)
                 nomesResponse.push(response[i].nome)
@@ -194,6 +194,21 @@ dashboard.post('/createMatch', function(req, res) {
     console.log(name);
 
     var promise = createMatch(name);
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+dashboard.post('/history', function(req, res) {
+    var id = req.body['id']
+    console.log(id);
+
+    var promise = findHistory(id);
     promise.then(
         function(response){
             res.send(response);
@@ -306,6 +321,10 @@ dashboard.post('/removeUser', function(req, res) {
     // var header = req.headers["bearertoken"];
 
     var idUser = req.body['user']
+
+    console.log(idUser)
+
+
     var promise = removeUser(idUser)
 
     promise.then(
@@ -401,6 +420,38 @@ dashboard.post('/updatePerfil', function(req, res) {
 
 //Funções da nossa API:
 //==============================================================
+function findHistory(id){
+    return new Promise(function(resolve,reject){
+        
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "CALL countScore("+id+");"
+
+        con.query(query, function(err, result){
+            if(err){
+                con.end()
+                reject("Query error!");
+            }
+            else{
+                con.end()
+                data = JSON.stringify(result[0]);
+                resolve(data);
+            } 
+        });
+        
+    });   
+}
+
 //Insere a partida no banco de dados
 function createMatch(name){
     return new Promise(function(resolve,reject){
