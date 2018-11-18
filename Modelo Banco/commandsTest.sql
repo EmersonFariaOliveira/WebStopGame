@@ -7,7 +7,7 @@ BEGIN
 	DECLARE idStore INT DEFAULT NULL;
     SET idStore = (SELECT perfil_idperfil FROM user WHERE iduser = id);
     DELETE FROM user WHERE iduser=id;
-    DELETE FROM perfil WHERE idperfil=idStore;
+    DELETE FROM perfil WHERE idperfil=id;
 END $$
 DELIMITER ;
 
@@ -32,6 +32,33 @@ BEGIN
 END $$
 DELIMITER ;
 
+#Store procedure for counter score
+DELIMITER $$
+CREATE PROCEDURE countScore (IN id INT)
+BEGIN
+		(SELECT
+			(
+			ISNULL(NULLIF(r.nome,'')) +
+			ISNULL(NULLIF(r.cidade,'')) +
+			ISNULL(NULLIF(r.animal,'')) +
+			ISNULL(NULLIF(r.fruta,'')) +
+			ISNULL(NULLIF(r.cor,'')) +
+			ISNULL(NULLIF(r.profissao,'')) +
+			ISNULL(NULLIF(r.carro,'')) +
+			ISNULL(NULLIF(r.filme,''))
+			) 'nColVazias',
+			p.nome as 'nomePartida'
+			FROM resposta as r, user_has_partida as uhp, partida p
+			WHERE r.partida_idpartida = uhp.partida_idpartida
+			AND r.user_iduser= uhp.user_iduser
+			AND p.idpartida = uhp.partida_idpartida
+			AND uhp.user_iduser=id
+		);
+END $$
+DELIMITER ;
+
+CALL countScore(15);
+
 
 insert into perfil (`idPerfil`,`vitorias`,`derrotas`, `pontuacao`) values(NULL, 0, 0, 0);
 insert into user values(NULL, "jefferson","jefferson@gmail.com", "inatelsemfio", 1);
@@ -51,3 +78,11 @@ CALL removeUser(2);
 CALL createUser("a", "a@gmail.com", "a");
 
 SELECT LAST_INSERT_ID();
+
+
+
+
+
+
+
+

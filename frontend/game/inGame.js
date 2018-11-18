@@ -41,6 +41,8 @@ function getPartidaID(){
     var obj = {nome: partida}
     data = JSON.stringify(obj);
 
+    console.log(partida)
+
     var xhttp = new XMLHttpRequest();
 
     var urlC = url + "/getPartidaID";
@@ -48,9 +50,11 @@ function getPartidaID(){
     xhttp.setRequestHeader('Content-type', 'application/json');
 
     xhttp.onreadystatechange = function() {
+        
         if(xhttp.readyState == 4 && xhttp.status == 200) {
-            idpartida = JSON.parse(this.responseText)[0].idpartida
             
+            idpartida = JSON.parse(this.responseText)["idpartida"]
+
             //progresso = obj[0].em_progresso;
         }
     }
@@ -72,7 +76,28 @@ function enviarResp(idpartida, iduser, nome, cidade, anima, fruta, cor, profissa
 
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
-            var obj = this.responseText;
+            setUserAndGame(iduser, idpartida)
+        }
+    }
+    xhttp.send(data);
+
+    
+}
+
+function setUserAndGame(idUser, idGame){
+
+    var obj = {idGame: idpartida, idUser: iduser}
+    data = JSON.stringify(obj);
+
+    var xhttp = new XMLHttpRequest();
+
+    var urlC = url + "/setUserAndGame";
+    xhttp.open('POST', urlC, true);
+    xhttp.setRequestHeader('Content-type', 'application/json');
+
+    xhttp.onreadystatechange = function() {
+        if(xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log("Vinculado com sucesso")
         }
     }
     xhttp.send(data);
@@ -95,11 +120,15 @@ function isGameFinished(){
 
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
-            var obj = JSON.parse(this.responseText);
-            progresso = obj[0].em_progresso;
+            // console.log("isGAMEFINISHED: " + this.responseText[0])
+            progresso = this.responseText;
+            // progresso = obj[0].em_progresso;
+
+            console.log("isGameFinished " + progresso)
+
+
             if (progresso == 0) {
                 myStopFunction();
-
                 var nome = document.getElementById("nome");
                 var cidade = document.getElementById("cidade");
                 var animal = document.getElementById("animal");
@@ -130,6 +159,8 @@ function isGameFinished(){
                            fruta.value,cor.value,profissao.value,carro.value,
                            filme.value)
                 
+                
+                
             }else{
                 document.getElementById("nome").disabled = false;
                 document.getElementById("cidade").disabled = false;
@@ -147,6 +178,7 @@ function isGameFinished(){
 }
 
 function finalizar(){
+
 
     console.log("Finalizando partida...")
     var name = localStorage.getItem("partida")
