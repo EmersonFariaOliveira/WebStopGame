@@ -40,7 +40,7 @@ function defineConnection(){
         password: "",
         database: "webstop",
         insecureAuth : true,
-        port : 3308
+        port : 3306
     });
 }
 
@@ -144,7 +144,7 @@ dashboard.get('/searchMatch', function(req, res) {
     promise.then(
         function(response){
             //seleciona um jogo aleatoriamente para usuario entrar
-            var numGame = Math.floor((Math.random() * response.length));
+            // var numGame = Math.floor((Math.random() * response.length));
             var nomesResponse = []
             for(var i = 0; i < response.length; i++)
                 nomesResponse.push(response[i].nome)
@@ -497,7 +497,6 @@ function getAvailableGame(){
             }
             else{
                 con.end()
-                
                 resolve(result);
             } 
         });
