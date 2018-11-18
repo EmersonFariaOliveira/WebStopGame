@@ -204,6 +204,23 @@ dashboard.post('/createMatch', function(req, res) {
     );
 });
 
+dashboard.post('/setUserAndGame', function(req, res) {
+    var idUser = req.body['idUser']
+    var idGame = req.body['idGame']
+
+    var promise = createUserAndGame(idUser, idGame);
+    promise.then(
+        function(response){
+            res.send(response);
+        },
+        function(err){
+            res.send(err);
+        }
+    );
+});
+
+
+
 //Responsavel por formatar os dados da partida
 /**
  * @api {post} localhost:5000/app/sendGame
@@ -324,6 +341,8 @@ dashboard.post('/getPartidaID', function(req, res) {
     //Verificação se o usuário é valido "BearerToken"
     // var header = req.headers["bearertoken"];
 
+    console.log("Function getPartidaID: " + req.body['nome'])
+
     var emailUser = req.body['nome']
     var promise = getPartidaID(emailUser)
 
@@ -413,6 +432,37 @@ function createMatch(name){
     });
 }
 
+//Relaciona usuário e partida
+function createUserAndGame(idUser, idGame){
+    return new Promise(function(resolve,reject){
+        
+        con = defineConnection()
+
+        con.connect(function(err){
+            if(err){
+                console.log("Connection failed");
+                reject("Connection failed");
+            } 
+            else{
+                console.log("Connection succeded");
+            } 
+        });
+
+        var query = "INSERT INTO `user_has_partida`(`user_iduser`, `partida_idpartida`) VALUES ("+idUser+","+idGame+")";
+        con.query(query, function(err, result){
+            if(err){
+                con.end()
+                reject("Query error!");
+            }
+            else{
+                con.end()
+                resolve("Usuario vinculado com sucesso!!");
+            } 
+        });
+        
+    });
+}
+
 function setGameFinished(name){
     return new Promise(function(resolve, reject){
 
@@ -461,13 +511,12 @@ function getGameIsFinished(name){
         var query = "SELECT *FROM partida WHERE nome = \"" + name + "\"";
         con.query(query, function(err, result){
             if(err){
-                con.end()
                 reject("Query error!");
             }
             else{
-                con.end()
-                
-                resolve(result);
+                console.log("Resultado: " + result[0].em_progresso)
+                resolve(result[0].em_progresso);
+                con.end();
             } 
         });
     });
@@ -661,7 +710,13 @@ function getPartidaID(nome){
                 reject("Query error!");
             }
             else{
-                resolve(result)
+
+                var obj = { idpartida: result[0].idpartida}
+                data = JSON.stringify(obj);
+
+                console.log("Entrou no getPartidaID: " + data)
+                
+                resolve(data)
                 con.end()
             }
         });
