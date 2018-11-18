@@ -14,21 +14,49 @@ function criarPartida(){
 
     //Nome da partida
     var name = document.getElementById("nomePartida").value;
+
+    console.log("criarPartida: " + name)
+
     var obj = { nome: name}
     data = JSON.stringify(obj);
 
-    var xhttp = new XMLHttpRequest();
+    var email = localStorage.getItem("email", email)
 
-    var urlC = url + "/createMatch";
-    xhttp.open('POST', urlC, true);
-    xhttp.setRequestHeader('Content-type', 'application/json');
+    localStorage.setItem("partida", name)
 
-    xhttp.onreadystatechange = function() {
-        if(xhttp.readyState == 4 && xhttp.status == 200) {
-            window.location.replace("jogo.html")
+
+    console.log("Email: " + email)
+
+    var promise = createGame(data);
+    promise.then(
+        function(response){
+            console.log(response)
+        },
+        function(err){
+            console.log(err)
         }
-    }
-    xhttp.send(data);
+    );
+}
+
+function createGame(data){
+
+    return new Promise(function(resolve,reject){
+        var xhttp = new XMLHttpRequest();
+        var urlC = url + "/createMatch";
+        xhttp.open('POST', urlC, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+
+        xhttp.onreadystatechange = function() {
+            // console.log("ReadyState: " + xhttp.readyState)
+            // console.log("Status: " + xhttp.status)
+
+            if(xhttp.readyState == 4 && xhttp.status == 200) {
+                window.location.replace("jogo.html")
+                resolve("Success")
+            }
+        }
+        xhttp.send(data);
+    });
 }
 
 function verificaLogin(){
@@ -83,6 +111,7 @@ function removeUser(){
             xhttp.onreadystatechange = function() {
                 if(xhttp.readyState == 4 && xhttp.status == 200) {
                     window.location.replace("login.html")
+                    localStorage.setItem("userOn", "off")
                 }else{
                     var json_data = xhttp.responseText; 
                     //console.log(json_data)
@@ -135,6 +164,7 @@ function jogar(){
     //console.log("aqui: "+localStorage.getItem("partida"))
     window.location.replace("jogo.html");
 
+
 }
 
 function partidaEmJogo(){
@@ -161,8 +191,25 @@ function partidaEmJogo(){
     xhttp.send();
 }
 
+
 function perfil(){
-    
+    var element = document.getElementById("pontuacaoTotal")
+    var elementR = document.getElementById("respondidas")
+    var elementNR = document.getElementById("nRespondidas")
+
+    var pontuacao = localStorage.getItem("pontuacaoTotal")
+    var respondidos = localStorage.getItem("respondidos")
+    var nRespondidos = localStorage.getItem("nRespondidos")
+
+    if(pontuacao == null || respondidos == null || nRespondidos == null){
+        element.innerHTML = "0  " + "Pontos no total!"
+        elementR.innerHTML = "0  " + "Campos preechidos no total!"
+        elementNR.innerHTML = "0  " + "Campos não preechidos no total!"
+    }else{
+        element.innerHTML = pontuacao + "  Pontos no total!"
+        elementR.innerHTML = respondidos + "  Campos preechidos no total!"
+        elementNR.innerHTML = nRespondidos + "  Campos não preechidos no total!"
+    }
 }
 
 function endSession(){

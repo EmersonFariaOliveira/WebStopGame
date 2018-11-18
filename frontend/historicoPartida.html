@@ -12,6 +12,7 @@
     <title>WebStop - Historico</title>
 
     <script src="game/require.js"></script>
+    <script src="game/historico.js"></script>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -132,31 +133,12 @@
                   <thead>
                     <tr>
                       <th>Nome partida</th>
-                      <th>Vitoria</th>
+                      <th>Respondido</th>
+                      <th>Não respondido</th>
                       <th>Pontuação</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>Partida um</td>
-                      <td>Vitória</td>
-                      <td>98.50</td>
-                    </tr>
-                    <tr>
-                      <td>Partida dois</td>
-                      <td>Derrota</td>
-                      <td>25.41</td>
-                    </tr>
-                    <tr>
-                      <td>Partida três</td>
-                      <td>Vitória</td>
-                      <td>90.50</td>
-                    </tr>
-                    <tr>
-                      <td>Partida quatro</td>
-                      <td>Vitória</td>
-                      <td>84</td>
-                    </tr>
+                  <tbody id="dataTableInfos">
                   </tbody>
                 </table>
               </div>
